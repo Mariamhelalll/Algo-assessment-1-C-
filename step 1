@@ -6,9 +6,17 @@ class Program
 {
     static void Main()
     {
-        string filePath = "Share_1_256.txt";
-        int [] Array = ReadFileToArray(filePath);
+        string[] filePaths = {"Share_1_256.txt","Share_2_256.txt", "Share_3_256.txt"};
+        foreach (string filePath in filePaths)
+        { 
+            OperateFile(filePath);
 
+        } 
+    }
+
+    static void OperateFile(string filePath)
+    {
+        int [] Array = AssignFileToArray(filePath);
         if (Array.Length>0)
         {
             Console.WriteLine("File is found and read successfully !");
@@ -22,11 +30,18 @@ class Program
         {
             Console.WriteLine("No suitable data found in the file !");
         }
+
     }
 
-    static int[] ReadFileToArray(string filePath)
+
+        
+
+        
+    
+
+    static int[] AssignFileToArray(string filePath)
     {
-        List<int> list = new List <int>();
+        List<int> list = new List <int>(); // stores integers dynamically
 
         try
         {
@@ -37,12 +52,12 @@ class Program
 
             }
 
-            using (StreamReader sr = new StreamReader(filePath))
+            using (StreamReader sr = new StreamReader(filePath)) // for reading the file line by line.
             {
                 string line;
-                while ((line =sr.ReadLine()) !=null)
+                while ((line =sr.ReadLine()) !=null) // reads one line at a time until the end of the file.
                 {
-                    if (int.TryParse(line.Trim(), out int value))
+                    if (int.TryParse(line.Trim(), out int value)) // While handling errors, it converts any char/string into integers.
                     {
                         list.Add(value);
                     }
@@ -55,7 +70,7 @@ class Program
                 }
             }
 
-            return list.ToArray();
+            return list.ToArray(); // converts the dynamic List<int> into a fixed sized array int[]
         }
 
         catch (Exception ex)
@@ -64,4 +79,5 @@ class Program
             return new int [0]; // Return empty array to prevent crashes
         }
     }
+
 }
