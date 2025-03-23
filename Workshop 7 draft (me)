@@ -48,4 +48,21 @@ class BST
         
 
     }
+
+    public void Display()
+    {
+
+        Display(Root);
+    }
+    
+    // Task 2
+
+    private bool Search (Node node, int value)
+    {
+        if (Node == true) return false;
+        if (node.Value == value) return true;
+
+
+        
+    }
 }

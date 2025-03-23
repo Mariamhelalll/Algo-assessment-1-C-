@@ -1,0 +1,117 @@
+// Step 2 sorting (Attempt 1)
+//Merge sort implementation
+
+
+using System;
+using System.IO;
+
+// Merge sort is used in this case as it is stable, works well in for both small and big datasets, and ensure a linerathmetic time complexity (nlog(n))
+
+class Sorting
+{
+    static void MergeSort(int[] array, int left, int right)
+    {
+        if (left<right)
+        {
+            int mid=(left+right)/2;
+            //Split the array into two halves
+            //1st half
+            MergeSort(array,left, mid);
+            //2nd half
+            MergeSort(array,mid + 1,right);
+            // Mege both halves at the end
+            Merge(array, left, mid, right);
+        }
+    }
+
+    static void Merge(int[] array, int left, int mid, int right)
+    {
+        int leftNumbers= mid-left + 1;// (+1) is added to ensure we include element at index mid.
+        int rightNumbers = right- mid;
+
+
+        // initializing temporary subarrays for numbers to be copied into.
+        int [] leftArray= new int [leftNumbers];
+        int [] rightArray = new int [rightNumbers];
+
+        // Copying numbers into temporary subarrays
+        for (int i=0; i<leftNumbers ;i++)
+        {
+            leftArray[i]= array[left+i];
+        }
+
+        for (int i=0; i<rightNumbers ;i++)
+        {
+            rightArray[i]=array[mid+ 1 +i];
+        }
+
+        // setting index pointers in arrays
+        int leftPointer=0,  rightPointer=0, mergedPosition=left;
+
+        while (leftPointer<leftNumbers && rightPointer<rightNumbers)
+        {
+            if(leftArray [leftPointer]<= rightArray[rightPointer])
+            {
+             array[mergedPosition++]=leftArray[leftPointer++];
+            }
+
+            else
+            {
+                array[mergedPosition++]= rightArray[rightPointer++];
+            } 
+
+
+        }
+
+        while (leftPointer<leftNumbers)
+        {
+            array[mergedPosition++]= leftArray[leftPointer++];
+
+        } 
+
+        while (rightPointer<rightNumbers)
+        {
+            array[mergedPosition++] = rightArray[rightPointer++];
+        } 
+
+
+    }
+
+    // Method to display the 10th value of the selected arrays 
+
+    static void DisplayElement(int[] array, int a)
+    {
+        for (int i=0; i < array.Length; i += a)
+        {
+            Console.WriteLine($"The {i}th value is {array[i]}");
+        }
+    }
+
+    // reading required files and converting them into integer arrays
+    static int[] AssignFileToArray(string filePath)
+    {
+        string[] lines = File.ReadAllLines(filePath);
+        int[] info = Array.ConvertAll(lines , int.Parse);
+        return info;
+    }
+
+    //Main method
+    static void Main()
+    {
+        string filePath = "Share_1_256.txt";
+        int[] info = AssignFileToArray(filePath);
+
+        //Ascending sorting
+        MergeSort(info, 0, info.Length - 1);
+        Console.WriteLine("\n Sorted in ascending order:");
+        DisplayElement(info,10);
+
+        //Descending
+        Array.Reverse(info);
+        Console.WriteLine("\n Sorted in descending order:");
+        DisplayElement(info,10);
+
+    }
+
+
+}

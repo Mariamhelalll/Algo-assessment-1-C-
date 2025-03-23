@@ -6,6 +6,7 @@ class Program
 {
     static void Main()
     {
+        //assigning the file paths of the required files to a string list
         string[] filePaths = {"Share_1_256.txt","Share_2_256.txt", "Share_3_256.txt"};
         foreach (string filePath in filePaths)
         { 
