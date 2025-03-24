@@ -19,7 +19,7 @@ class Sorting
             MergeSort(array,left, mid);
             //2nd half
             MergeSort(array,mid + 1,right);
-            // Mege both halves at the end
+            // Merge both halves at the end
             Merge(array, left, mid, right);
         }
     }
