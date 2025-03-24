@@ -1,0 +1,102 @@
+using System;
+using System.Collections.Generic;
+using System.IO;
+
+// This code implements the linear searching algorithm for small datasets (256)
+// Linear search is used to search for a user-defined value for a selected array
+
+class Searching
+{
+    static List <int> LinearSearch (int[] array, int goal)
+    {
+        List <int> indices= new List <int> (); // List for storing elements in the array the match the goal element chosen by the user.
+
+        for (int i=0 ; i<array.Length ; i++)
+        {
+            if (array[i]==goal)
+            {
+                indices.Add(i); // Stores the found value's index if it matches the goal element chosen by the user.
+            }
+        }
+
+        return indices;
+    }
+
+    // Method for searching linearly for the user-chosen value and displaying its index/ indices in the selected array.
+    static void SearchValue(int[] array , int goal)
+    {
+        List <int> indices = LinearSearch(array,goal);
+        if (indices.Count>0)
+        {
+            Console.WriteLine($"The value {goal} is found at the indices {string.Join(",",indices )}");
+
+            
+        }
+
+        else
+        {
+            Console.WriteLine($"The value {goal} is not present in this array ! ");
+
+        }
+        
+    } 
+
+    // Method to read file and convert it into an integer array
+
+    static int[] AssignFileToArray(string filePath)
+    {
+        try
+        {
+            string[] lines= File.ReadAllLines(filePath);
+            int[] info= Array.ConvertAll(lines, int.Parse);
+            return info;
+        }
+
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error reading this file: {ex.Message}");
+            return new int[0]; // if an error occurs, the method returns an empty array to prevent any clashes.
+        }
+    }
+
+    // Main method
+
+    static void Main()
+    {
+        // reading the selected file name.
+        Console.Write("Enter the required file name : (Eg: Share_1_256.txt)");
+        string filePath= Console.ReadLine();
+        
+        if (!File.Exists(filePath))
+        {
+            Console.WriteLine("No file found !");
+            return;
+        }
+
+        // reading file content
+
+        int [] array = AssignFileToArray(filePath);
+        if (array.Length==0)
+        {
+            Console.WriteLine("This file is empty !");
+            return;
+        }
+        
+        //Ask user for the goal value
+        Console.Write("Please enter a value to search for: ");
+        int goal;
+        while(!int.TryParse(Console.ReadLine(), out goal))
+        {
+            Console.Write("Input is invalid ! Please enter a numeric value : ");
+
+        }
+
+        // Executing the search algorithm
+        SearchValue(array,goal);
+        
+
+
+    }
+
+}
+
