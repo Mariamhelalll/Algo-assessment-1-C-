@@ -1,0 +1,48 @@
+using System;
+using System.IO;
+using System.Collections.Generic;
+
+class AdvancedSearching
+{
+    static void Quicksort(int[] array, int min, int max)
+    {
+        if (min<max)
+        {
+            int partitionPosition= Partition(array, min, max); 
+            Quicksort(array, min, partitionPosition-1);// To not include pivot point (left side)
+            Quicksort(array , partitionPosition+1, max); // To not include pivot point (right side)
+        }
+    }
+
+    // Partition function for quicksort
+
+    static int Partition(int[] array, int min, int max)
+    {
+        int pivot = array[max]; // last element is chosen as a pivot
+        int i = min-1; // Pointer for the smaller element
+
+        for (int j = min ; j < max; j++)
+        {
+            if (array[j] <= pivot)
+            {
+                i++;
+                Swap (array,i,j); // Swap smaller element with the correct position
+
+            }
+        
+        }
+
+        Swap (array, i + 1; max); // Pivot swapped into correct position
+        return i +1; // Return the partition index
+
+    }
+
+    //Swap method to swap 2 elements in the array
+    
+    static void Swap (int[] array, int i , int j)
+    {
+        int sub  = array[i];
+        array[i]=array[j];
+        array[j] = sub;
+    }
+}
