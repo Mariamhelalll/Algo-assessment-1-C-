@@ -35,16 +35,15 @@ class Searching
             {
                 diffMinimum=difference;
                 nearestValues.Clear();
-                nearestValues[array[i]];
-                new List<int> {i}; // Add to dictionary
+                nearestValues[array[i]] = new List<int> {i}; // Add to dictionary
             }
 
-            else if (difference=diffMinimum)
+            else if (difference==diffMinimum)
             {
                 if (!nearestValues.ContainsKey(array[i]))
                 {
                     nearestValues[array[i]]=new List <int> (); // creating a new list
-                    nearestValues[array[i]].Add[i];// Add index to the list
+                    nearestValues[array[i]].Add(i);// Add index to the list
 
                 }
             }
@@ -71,6 +70,13 @@ class Searching
         {
             Console.WriteLine($"The value {goal} is not present in this array ! ");
             Dictionary<int,List<int>> nearest= NearestValueSearch(array,goal);
+
+            Console.WriteLine("Nearest value(s) are : ");
+
+            foreach(var pair in nearest)
+            {
+                Console.WriteLine($"The value {pair.Key} at indices : {string.Join(",",pair.Value)}");
+            }
 
         }
         
