@@ -23,6 +23,39 @@ class Searching
         return indices;
     }
 
+    // Method to provide value(s) and their location(s) of the nearest value(s) if the desired value chosen by the user is not in the selected array
+    static Dictionary <int,List <int>> NearestValueSearch(int[] array, int goal)
+    {
+        int diffMinimum = int.MaxValue; // Ensures the starting point is the largest possible integer value, making sure that any difference found will be smaller that the int.MaxValue
+        Dictionary <int,List<int>>  nearestValues= new Dictionary<int, List<int>>(); // Stores nearest value(s) and their index/indices.
+        for(int i=0; i<array.Length ; i++)
+        {
+            int difference= Math.Abs(array[i]-goal);
+            if(difference<diffMinimum)
+            {
+                diffMinimum=difference;
+                nearestValues.Clear();
+                nearestValues[array[i]];
+                new List<int> {i}; // Add to dictionary
+            }
+
+            else if (difference=diffMinimum)
+            {
+                if (!nearestValues.ContainsKey(array[i]))
+                {
+                    nearestValues[array[i]]=new List <int> (); // creating a new list
+                    nearestValues[array[i]].Add[i];// Add index to the list
+
+                }
+            }
+        }
+
+        return nearestValues;
+
+
+
+    }
+
     // Method for searching linearly for the user-chosen value and displaying its index/ indices in the selected array.
     static void SearchValue(int[] array , int goal)
     {
@@ -37,6 +70,7 @@ class Searching
         else
         {
             Console.WriteLine($"The value {goal} is not present in this array ! ");
+            Dictionary<int,List<int>> nearest= NearestValueSearch(array,goal);
 
         }
         
