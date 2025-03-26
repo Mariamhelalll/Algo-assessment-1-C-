@@ -135,7 +135,7 @@ class Searching
 
         }
 
-        // Executing the  linear search algorithm
+        // search for the required goal element chosen by the user
         SearchValue(array,goal);
         
 

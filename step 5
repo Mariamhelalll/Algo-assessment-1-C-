@@ -2,19 +2,23 @@ using System;
 using System.IO;
 using System.Collections.Generic;
 
-class AdvancedSearching
+class AdvancedSearching // for the share files ending in (_2048)
 {
-    static void Quicksort(int[] array, int min, int max)
+    //Quick sort mechanism
+    // step 1: pick a pivot point
+    // step 2: Partition the array. i.e: move elements that are smaller than the pivot to the left and those ehich are greater than the pivot to the right.
+    // step 3: Sort both halves.
+    static void QuickSort(int[] array, int min, int max)
     {
         if (min<max)
         {
             int partitionPosition= Partition(array, min, max); 
-            Quicksort(array, min, partitionPosition-1);// To not include pivot point (left side)
-            Quicksort(array , partitionPosition+1, max); // To not include pivot point (right side)
+            QuickSort(array, min, partitionPosition-1);// To not include pivot point (left side)
+            QuickSort(array , partitionPosition+1, max); // To not include pivot point (right side)
         }
     }
 
-    // Partition function for quicksort
+    // Partition method for quicksort
 
     static int Partition(int[] array, int min, int max)
     {
@@ -26,23 +30,227 @@ class AdvancedSearching
             if (array[j] <= pivot)
             {
                 i++;
-                Swap (array,i,j); // Swap smaller element with the correct position
+                Swap (array,i,j); // Swap smaller element with the correct position(to the left)
 
             }
         
         }
 
-        Swap (array, i + 1; max); // Pivot swapped into correct position
+        Swap (array, i + 1, max); // Pivot swapped into correct position
         return i +1; // Return the partition index
 
     }
 
     //Swap method to swap 2 elements in the array
-    
+
     static void Swap (int[] array, int i , int j)
     {
         int sub  = array[i];
         array[i]=array[j];
         array[j] = sub;
     }
+
+    // Binary search
+    // this is used due to it time complexity (O(log(n))) , reduced number of comparisons by eliminating half of the remaining elements and that it is ideal for scanning large and sorted datasets.
+    // 
+    static List <int> BinarySearch(int[] array , int goal)
+    {
+        List <int> indices = new List <int> ();
+        int left = 0 , right= array.Length - 1;
+        while(left<=right)
+        {
+            int mid = left + (right-left)/2;
+            if (array [mid] == goal)
+            {
+                indices.Add(mid);
+                int leftPosition = mid-1 , rightPosition= mid+1;
+                while(leftPosition >=0 && array [leftPosition]== goal)
+                {
+                    indices.Add(leftPosition--);
+
+                }
+
+                while(rightPosition <= array.Length && rightPosition == goal)
+                {
+                    indices.Add(rightPosition++);
+                }
+            }
+
+            else if ( array[mid] <goal)
+            {
+                left= mid+1;
+            }
+
+            else
+            {
+                right = mid -1;
+            }
+        }
+        
+        return indices;
+
+    } 
+
+    // Insertion sort
+    //used to manually sort the elements of the array which aids the binary search algorithm
+
+    static void InsertionSort(List<int> list)
+    {
+        for (int i=1 ; i<list.Count ; i++) // (i=1) in order to start from the 2nd element as the 1st element is already sorted in place.
+        {
+            int current = list [i];
+            int j = i-1;
+
+            while (j>=0 && list[j]>current)
+            {
+                list[j+1] =list[j]; // Shift the current element to right if it is greater than the (j+1) element
+                j--;
+            } // this process is repeated unril the current element is in the correct place.
+
+            list[j+1]= current; // current element is placed in the suitable position.
+        } // is repeated for all elements in the list unril they are all sorted.
+    }
+
+
+    // Method to provide value(s) and their location(s) of the nearest value(s) if the desired value chosen by the user is not in the selected array
+    static Dictionary <int,List <int>> NearestValueSearch(int[] array, int goal)
+    {
+        int diffMinimum = int.MaxValue; // Ensures the starting point is the largest possible integer value, making sure that any difference found will be smaller that the int.MaxValue
+        Dictionary <int,List<int>>  nearestValues= new Dictionary<int, List<int>>(); // Stores nearest value(s) and their index/indices.
+        for(int i=0; i<array.Length ; i++)
+        {
+            int difference= Math.Abs(array[i]-goal);
+            if(difference<diffMinimum)
+            {
+                diffMinimum=difference;
+                nearestValues.Clear();
+                nearestValues[array[i]] = new List<int> {i}; // Add to dictionary
+            }
+
+            else if (difference==diffMinimum)
+            {
+                if (!nearestValues.ContainsKey(array[i]))
+                {
+                    nearestValues[array[i]]=new List <int> (); // creating a new list
+                    nearestValues[array[i]].Add(i);// Add index to the list
+
+                }
+            }
+        }
+
+        return nearestValues;
+
+
+
+    }
+
+    // Method to read file and convert it into an integer array
+
+    static int[] AssignFileToArray(string filePath)
+    {
+        try
+        {
+            string[] lines= File.ReadAllLines(filePath);
+            int[] info= Array.ConvertAll(lines, int.Parse);
+            return info;
+        }
+
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error reading this file: {ex.Message}");
+            return new int[0]; // if an error occurs, the method returns an empty array to prevent any crashes.
+        }
+    }
+
+    // Method to display the 50th value of the selected arrays 
+
+    static void DisplayElement(int[] array, int a)
+    {
+        for (int i=0; i < array.Length; i += a)
+        {
+            Console.WriteLine($"The {i}th value is {array[i]}");
+        }
+    }
+
+
+    // Main method
+
+    static void Main()
+    {
+        // reading the selected file name.
+        Console.Write("Enter the required file name : (Eg: Share_1_2048.txt)");
+        string filePath= Console.ReadLine();
+        
+        // Error handling using (if)
+        if (!File.Exists(filePath))
+        {
+            Console.WriteLine("No file found !");
+            return;
+        }
+
+        // reading file content
+
+        int [] array = AssignFileToArray(filePath);
+        if (array.Length==0)
+        {
+            Console.WriteLine("This file is empty !");
+            return;
+        }
+
+        //Ascending sorting
+        QuickSort(array, 0, array.Length - 1);
+        Console.WriteLine("\n Sorted in ascending order:");
+        DisplayElement(array,50);
+
+        //Descending
+        Array.Reverse(array);
+        Console.WriteLine("\n Sorted in descending order:");
+        DisplayElement(array,50);
+
+
+        
+        //Ask user for the goal value
+        Console.Write("Please enter a value to search for: ");
+        int goal;
+
+        // Error handling for invalid input (non- numerical values enetered by the user)
+        while(!int.TryParse(Console.ReadLine(), out goal))
+        {
+            Console.Write("Input is invalid ! Please enter a numeric value : ");
+
+        }
+
+        // Searching for the user-chosen value and displaying its index/ indices in the selected array.
+        List <int> indices = BinarySearch(array,goal);
+        if (indices.Count>0)
+        {
+            Console.WriteLine($"The value {goal} is found at the indices {string.Join(",",indices )}"); // Provides the loaction(s) of the desired value chosen by the user.
+
+            
+        }
+
+        else
+        {
+            Console.WriteLine($"The value {goal} is not present in this array ! ");
+            Dictionary<int,List<int>> nearest= NearestValueSearch(array,goal);
+
+            Console.WriteLine("Nearest value(s) are : ");
+
+            foreach(var pair in nearest)
+            {
+                Console.WriteLine($"The value {pair.Key} at indices : {string.Join(",",pair.Value)}");
+            }
+
+        }
+        
+
+        
+        
+
+
+    }
+
+
+
 }
+
