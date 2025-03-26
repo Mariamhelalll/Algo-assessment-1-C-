@@ -132,15 +132,16 @@ class Sorting
 
             Console.WriteLine($"\nFile {filePath} is in process !");
 
-        //Ascending sorting
-        MergeSort(info, 0, info.Length - 1);
-        Console.WriteLine("\n Sorted in ascending order:");
-        DisplayElement(info,10);
+          //Ascending sorting
+          MergeSort(info, 0, info.Length - 1);
+          Console.WriteLine("\n Sorted in ascending order:");
+          DisplayElement(info,10);
 
-        //Descending
-        Array.Reverse(info);
-        Console.WriteLine("\n Sorted in descending order:");
-        DisplayElement(info,10);
+          //Descending
+          Array.Reverse(info);
+          Console.WriteLine("\n Sorted in descending order:");
+          DisplayElement(info,10);
+        }
 
     }
 
