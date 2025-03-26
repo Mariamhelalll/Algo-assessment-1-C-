@@ -50,6 +50,36 @@ class AdvancedSearching // for the share files ending in (_2048)
         array[j] = sub;
     }
 
+
+    // method to read the file line at a once
+    static List<int>  ReadLine(string filePath)
+    {
+        List <int> numbers = new List <int> ();
+        try
+        {
+            while ((line =sr.ReadLine()) !=null) // reads one line at a time until the end of the file.
+            {
+                if (int.TryParse(line.Trim(), out int value)) // While handling errors, it converts any char/string into integers.
+                {
+                    numbers.Add(value);
+                }
+
+                else
+                {
+                    Console.WriteLine($"Warning: Skipping in valid value '{line}' in file.");
+                
+                }    
+            }    
+        }
+
+        catch (Exception ex)
+        {
+            Console.WriteLine("Error while reading file :{ex.Message}");
+        }
+
+        return numbers;
+    }
+
     // Binary search
     // this is used due to it time complexity (O(log(n))) , reduced number of comparisons by eliminating half of the remaining elements and that it is ideal for scanning large and sorted datasets.
     // 
@@ -66,13 +96,13 @@ class AdvancedSearching // for the share files ending in (_2048)
                 int leftPosition = mid-1 , rightPosition= mid+1;
                 while(leftPosition >=0 && array [leftPosition]== goal)
                 {
-                    indices.Add(leftPosition--);
+                    indices.Add(array[leftPosition--]);
 
                 }
 
                 while(rightPosition <= array.Length && rightPosition == goal)
                 {
-                    indices.Add(rightPosition++);
+                    indices.Add(array[rightPosition++]);
                 }
             }
 
@@ -194,6 +224,7 @@ class AdvancedSearching // for the share files ending in (_2048)
         // reading file content
 
         int [] array = AssignFileToArray(filePath);
+        List <int> info= ReadLine(filePath);
         if (array.Length==0)
         {
             Console.WriteLine("This file is empty !");
