@@ -107,7 +107,7 @@ class Searching
         // reading the selected file name.
         string downloadsPath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile)+  @"\Downloads\";
         Console.Write("Enter the required file name : (Eg: Share_1_256.txt)");
-        string filePath= Console.ReadLine();
+        string fileName= Console.ReadLine();
         string filePath=Path.Combine(downloadsPath,fileName);// merge both paths
         
         // Error handling using (if)
