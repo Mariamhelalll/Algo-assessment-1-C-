@@ -91,16 +91,46 @@ class Sorting
     // reading required files and converting them into integer arrays
     static int[] AssignFileToArray(string filePath)
     {
-        string[] lines = File.ReadAllLines(filePath);
-        int[] info = Array.ConvertAll(lines , int.Parse);
-        return info;
+        try
+        {
+            if(!File.Exists(filePath))
+            {
+                Console.WriteLine($"{filePath} not found");
+                return new int[0]; // returns empty array to prevent any crashes
+
+            }
+
+            string[] lines = File.ReadAllLines(filePath);
+            int[] info = Array.ConvertAll(lines , int.Parse);
+            return info;
+        }
+        
+        catch(Exception ex)
+        {
+            Console.WriteLine($"Error occured while reading file:{ex.Message}");
+            return new int [0];
+        }
+
     }
 
     //Main method
     static void Main()
     {
-        string filePath = "Share_1_256.txt";
-        int[] info = AssignFileToArray(filePath);
+        string downloadsPath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile)+  @"\Downloads\";
+        string[] fileNames = {"Share_1_256.txt","Share_2_256.txt", "Share_3_256.txt"};
+        foreach (string fileName in fileNames)
+        { 
+            string filePath=Path.Combine(downloadsPath,fileName);// merge both paths
+            int[] info = AssignFileToArray(filePath);
+
+            if (info.Length==0)
+            {
+                Console.WriteLine("This file is empty!");
+                continue;
+
+            }
+
+            Console.WriteLine($"\nFile {filePath} is in process !");
 
         //Ascending sorting
         MergeSort(info, 0, info.Length - 1);
