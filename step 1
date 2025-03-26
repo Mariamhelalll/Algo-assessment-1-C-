@@ -8,9 +8,11 @@ class Program // For share files ending in (_256)
     static void Main()
     {
         //assigning the file paths of the required files to a string list
+        string downloadsPath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile)+  @"\Downloads\";
         string[] filePaths = {"Share_1_256.txt","Share_2_256.txt", "Share_3_256.txt"};
         foreach (string filePath in filePaths)
         { 
+            string filePath=Path.Combine(downloadsPath,filePath);
             OperateFile(filePath);
 
         } 

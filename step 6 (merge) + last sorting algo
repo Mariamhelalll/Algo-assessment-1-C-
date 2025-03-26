@@ -1,0 +1,26 @@
+using System;
+using System.Collection.Generic;
+using System.IO;
+
+class AdvancedSearchingTwo
+{
+    static void HeapSort(int[] array)
+    {
+        int a = array.Length;
+        // Step 1: Max heap construction
+        for (int i=a/2-1 ; i>=0 ; i--)
+        {
+            Heap(array,a,i);
+
+        }
+
+        // Step 2: Extraction of elements from Heap once at a time
+        for(int i=a-1 ; i>0 ; i--)
+        {
+            Swap (array,0,i); //Move root (largest element in the array) to the end
+            Heap(array,i,0); // After reducing the heap size, the Heap method is reapplied on the root, ensuring the consistency of the heap property 
+        }
+    }
+
+    static void Heap()
+}
