@@ -178,67 +178,74 @@ class AdvancedSearching // for the share files ending in (_2048)
     static void Main()
     {
         // reading the selected file name.
+         // reading the selected file name.
         string downloadsPath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile)+  @"\Downloads\";
-        string[] fileNames = {"Share_1_2048.txt","Share_2_2048.txt", "Share_3_2048.txt"};
-        foreach (string fileName in fileNames)
-        { 
-            string filePath=Path.Combine(downloadsPath,fileName);// merge both paths
-            int[] info = AssignFileToArray(filePath);
+        Console.Write("Enter the required file name : (Eg: Share_1_256.txt)");
+        string fileName= Console.ReadLine();
+        string filePath=Path.Combine(downloadsPath,fileName);// merge both paths
+        
+        // Error handling using (if)
+        if (!File.Exists(filePath))
+        {
+            Console.WriteLine("No file found !");
+            return;
+        }
 
-            if (info.Length==0)
-            {
-                Console.WriteLine("This file is empty!");
-                continue;
+        // reading file content
 
-            }
+        int [] array = AssignFileToArray(filePath);
+        if (array.Length==0)
+        {
+            Console.WriteLine("This file is empty !");
+            return;
+        }
+        Console.WriteLine($"\nFile {filePath} is in process !");
 
-            Console.WriteLine($"\nFile {filePath} is in process !");
 
+        //Ascending sorting
+        QuickSort(array, 0, array.Length - 1);
+        Console.WriteLine("\n Sorted in ascending order:");
+        DisplayElement(array,50);
 
-          //Ascending sorting
-          QuickSort(array, 0, array.Length - 1);
-          Console.WriteLine("\n Sorted in ascending order:");
-          DisplayElement(array,50);
-
-          //Descending
-          Array.Reverse(array);
-          Console.WriteLine("\n Sorted in descending order:");
-          DisplayElement(array,50);
+        //Descending
+        Array.Reverse(array);
+        Console.WriteLine("\n Sorted in descending order:");
+        DisplayElement(array,50);
 
 
         
-          //Ask user for the goal value
-          Console.Write("Please enter a value to search for: ");
-          int goal;
+        //Ask user for the goal value
+        Console.Write("Please enter a value to search for: ");
+        int goal;
 
-          // Error handling for invalid input (non- numerical values enetered by the user)
-          while(!int.TryParse(Console.ReadLine(), out goal))
-            {
-               Console.Write("Input is invalid ! Please enter a numeric value : ");
+        // Error handling for invalid input (non- numerical values enetered by the user)
+        while(!int.TryParse(Console.ReadLine(), out goal))
+        {
+            Console.Write("Input is invalid ! Please enter a numeric value : ");
 
-            }
+        }
 
-          // Searching for the user-chosen value and displaying its index/ indices in the selected array.
-          List <int> indices = BinarySearch(array,goal);
-          if (indices.Count>0)
-            {
-             Console.WriteLine($"The value {goal} is found at the indices {string.Join(",",indices )}"); // Provides the loaction(s) of the desired value chosen by the user.
+        // Searching for the user-chosen value and displaying its index/ indices in the selected array.
+        List <int> indices = BinarySearch(array,goal);
+        if (indices.Count>0)
+        {
+            Console.WriteLine($"The value {goal} is found at the indices {string.Join(",",indices )}"); // Provides the loaction(s) of the desired value chosen by the user.
 
             
-            }
+        }
 
-          else
+        else
+        {
+            Console.WriteLine($"The value {goal} is not present in this array ! ");
+            Dictionary<int,List<int>> nearest= NearestValueSearch(array,goal);
+
+            Console.WriteLine("Nearest value(s) are : ");
+
+            foreach(var pair in nearest)
             {
-             Console.WriteLine($"The value {goal} is not present in this array ! ");
-             Dictionary<int,List<int>> nearest= NearestValueSearch(array,goal);
-
-             Console.WriteLine("Nearest value(s) are : ");
-
-             foreach(var pair in nearest)
-                {
-                 Console.WriteLine($"The value {pair.Key} at indices : {string.Join(",",pair.Value)}");
-                }
-            }    
+             Console.WriteLine($"The value {pair.Key} at indices : {string.Join(",",pair.Value)}");
+            }
+            
 
         }
         
