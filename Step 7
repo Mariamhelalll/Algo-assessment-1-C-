@@ -129,7 +129,7 @@ class StepSeven
 
             if (sortedArray[mid]<goal)
             {
-                ledt=mid+1;
+                left=mid+1;
             }
 
             else
