@@ -1,0 +1,191 @@
+using System;
+using System.IO;
+using System.Collections.Generic;
+
+class StepSeven
+{
+    static List <int> MergeFiles (string one, string two)
+    {
+        List<int> mergedFiles = new List <int> ();
+
+        try
+        {
+            //Reading the files line by line
+            using (StreamReader sr1 = new StreamReader(one))
+            using (StreamReader sr2 = new StreamReader(two))
+            {
+                string line;
+                while((line=sr1.ReadLine())!=null)
+                {
+                    if (int.TryParse(line, out int num))
+                    {
+                        mergedFiles.Add(num);
+                    }
+
+                }
+
+                while ((line=sr2.ReadLine())!=null)
+                {
+                    if (int.TryParse(line, out int num))
+                    {
+                        mergedFiles.Add(num);
+                    }
+                }
+            }
+        }
+
+        catch(Exception ex)
+        {
+            Console.WriteLine ($"Error occured : {ex.Message});
+        }
+
+     return mergedFiles;
+    }
+
+    //Quick sort mechanism
+    // step 1: pick a pivot point
+    // step 2: Partition the array. i.e: move elements that are smaller than the pivot to the left and those ehich are greater than the pivot to the right.
+    // step 3: Sort both halves.
+    static void QuickSort(int[] array, int min, int max)
+    {
+        if (min<max)
+        {
+            int partitionPosition= Partition(array, min, max); 
+            QuickSort(array, min, partitionPosition-1);// To not include pivot point (left side)
+            QuickSort(array , partitionPosition+1, max); // To not include pivot point (right side)
+        }
+    }
+
+    // Partition method for quicksort
+
+    static int Partition(int[] array, int min, int max)
+    {
+        int pivot = array[max]; // last element is chosen as a pivot
+        int i = min-1; // Pointer for the smaller element
+
+        for (int j = min ; j < max; j++)
+        {
+            if (array[j] <= pivot)
+            {
+                i++;
+                Swap (array,i,j); // Swap smaller element with the correct position(to the left)
+
+            }
+        
+        }
+
+        Swap (array, i + 1, max); // Pivot swapped into correct position
+        return i +1; // Return the partition index
+
+    }
+
+    //Swap method to swap 2 elements in the array
+
+    static void Swap (int[] array, int i , int j)
+    {
+        int sub  = array[i];
+        array[i]=array[j];
+        array[j] = sub;
+    }
+
+    // binary search
+    static int BinarySearch(int[] array, int goal)
+    {
+        int left = 0 , right = array.Length -1;
+        while(left<=right)
+        {
+            int mid = left+(right-left)/ 2 ;
+            if(array[mid] == goal)
+            {
+                return mid;
+            }
+            if (array[mid]<goal)
+            {
+                left=mid+1;
+            }
+
+            else
+            {
+                right = mid-1;
+            }
+        }
+        return -1;
+    }
+
+    static int Display(List<int> sortedArray, int goal)
+    {
+        int left =0 , right= sortedArray.Count-1;
+        int nearest=sortedArray[0];
+        int minDiff= Math.Abs(goal-nearest);
+        while (left<=right)
+        {
+            int mid left+(right-left)/2;
+            int diff = Math.Abs(sortedArray[mid],goal);
+            if(diff<minDiff)
+            {
+                minDiff=diff;
+                nearest=sortedArray[mid];
+            }
+
+            if (sortedArray[mid]<goal)
+            {
+                ledt=mid+1;
+            }
+
+            else
+            {
+                right = mid-1;
+            }
+        }
+        return nearest;
+    }
+
+    static void DisplayElement(int[] array, int a)
+    {
+        for (int i=0; i < array.Length; i += a)
+        {
+            Console.WriteLine($"The {i}th value is {array[i]}");
+        }
+    }
+
+    static void Main()
+    {
+        string downloadsPath=Environment.GetFolderPath(Environment.SpecialFolder.UserProfile)+@"\Downloads\";
+        string one= Path.Combine(downloadsPath ,"Share_1_2048.txt");
+        string two= Path.Combine(downloadsPath,"Share_3_2048.txt");
+
+        Console.WriteLine("\n Merging Files");
+        List<int> mergedFiles=MergeFiles(one, two);
+        if(mergedFiles.Length == 0)
+        {
+            Console.WriteLine("This file is empty!");
+            return;
+        }
+
+        Console.WriteLine("\n Merged cintent is being sorted !");
+        QuickSort(mergedFiles,0,mergedFiles.Length -1);
+        DisplayElement(mergedFiles);
+
+        Console.Write("\nEnter a value you wish to be searched for :");
+        int goal;
+        while(!int.TryParse(Console.ReadLine(),out goal))
+        {
+            Console.Write("Inavlid input! Please enter a numeric value:");
+
+        }
+
+        int position =  BinarySearch(mergedFiles,goal);
+        if(position != -1)
+        {
+            Console.WriteLine($"The value {goal} is found at index {position}");
+
+        }
+
+        else
+        {
+            int nearest = Display(mergedFiles,goal);
+            Console.WriteLine($"The value {goal} was not found,. Nearest value is {nearest}.");
+        }
+    }
+
+}
